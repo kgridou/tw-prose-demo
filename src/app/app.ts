@@ -17,6 +17,7 @@ import { RouterOutlet } from '@angular/router';
     <!-- Size variants must be used with base prose class -->
     <article class="prose prose-lg">
       <h1>Larger typography</h1>
+      <p>Beautiful typography without any JavaScript.</p>
     </article>
 
     <router-outlet />
