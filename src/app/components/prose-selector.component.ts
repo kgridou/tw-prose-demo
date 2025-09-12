@@ -11,67 +11,34 @@ export interface ProseSettings {
   selector: 'app-prose-selector',
   template: `
     <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Typography Settings</h2>
-      
-      <div class="space-y-4">
-        <!-- Library Selection -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Typography Library
-          </label>
-          <div class="space-y-2">
-            <label class="flex items-center">
-              <input 
-                type="radio" 
-                name="library" 
-                value="tw-prose" 
-                [checked]="settings().library === 'tw-prose'"
-                (change)="updateLibrary('tw-prose')"
-                class="mr-2"
-              >
-              <span class="text-sm text-gray-900 dark:text-gray-100">tw-prose (CSS-only)</span>
-            </label>
-            <label class="flex items-center">
-              <input 
-                type="radio" 
-                name="library" 
-                value="tailwind-typography" 
-                [checked]="settings().library === 'tailwind-typography'"
-                (change)="updateLibrary('tailwind-typography')"
-                class="mr-2"
-              >
-              <span class="text-sm text-gray-900 dark:text-gray-100">@tailwindcss/typography (Plugin)</span>
-            </label>
-          </div>
-        </div>
+      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+        Typography Settings
+      </h2>
 
+      <div class="space-y-4">
         <!-- Size Selection -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
             Size Variant
           </label>
-          <select 
-            [value]="settings().size"
-            (change)="updateSize($event)"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-          >
-            <option value="base">Base (default)</option>
-            <option value="sm">Small</option>
-            <option value="lg">Large</option>
-            <option value="xl">Extra Large</option>
-            <option value="2xl">2X Large</option>
-          </select>
+          <div class="flex flex-wrap gap-2">
+            <button (click)="updateSize('base')" [class]="getSizeButtonClass('base')">Base</button>
+            <button (click)="updateSize('sm')" [class]="getSizeButtonClass('sm')">Small</button>
+            <button (click)="updateSize('lg')" [class]="getSizeButtonClass('lg')">Large</button>
+            <button (click)="updateSize('xl')" [class]="getSizeButtonClass('xl')">XL</button>
+            <button (click)="updateSize('2xl')" [class]="getSizeButtonClass('2xl')">2XL</button>
+          </div>
         </div>
 
         <!-- Dark Mode Toggle -->
         <div>
           <label class="flex items-center">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               [checked]="settings().darkMode"
               (change)="toggleDarkMode()"
               class="mr-2"
-            >
+            />
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</span>
           </label>
         </div>
@@ -98,13 +65,7 @@ export class ProseSelectorComponent {
 
   settings = () => this._settings;
 
-  protected updateLibrary(library: ProseLibrary) {
-    this._settings = { ...this._settings, library };
-    this.settingsChange.emit(this._settings);
-  }
-
-  protected updateSize(event: Event) {
-    const size = (event.target as HTMLSelectElement).value as ProseSize;
+  protected updateSize(size: ProseSize) {
     this._settings = { ...this._settings, size };
     this.settingsChange.emit(this._settings);
   }
@@ -112,6 +73,16 @@ export class ProseSelectorComponent {
   protected toggleDarkMode() {
     this._settings = { ...this._settings, darkMode: !this._settings.darkMode };
     this.settingsChange.emit(this._settings);
+  }
+
+  protected getSizeButtonClass(size: ProseSize): string {
+    const baseClasses = 'px-3 py-1.5 text-sm font-medium rounded-md transition-colors border';
+    const isActive = this._settings.size === size;
+
+    if (isActive) {
+      return `${baseClasses} bg-blue-600 text-white border-blue-600`;
+    }
+    return `${baseClasses} bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600`;
   }
 
   protected getClassPreview(): string {
