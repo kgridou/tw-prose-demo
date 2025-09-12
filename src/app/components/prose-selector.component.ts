@@ -32,7 +32,7 @@ export interface ProseSettings {
 
         <!-- Dark Mode Toggle -->
         <div>
-          <label class="flex items-center">
+          <label class="flex items-center cursor-pointer w-fit">
             <input
               type="checkbox"
               [checked]="settings().darkMode"
