@@ -1,2 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-prose';
+
+@plugin "@tailwindcss/typography" {
+  classname: legacy-prose;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
