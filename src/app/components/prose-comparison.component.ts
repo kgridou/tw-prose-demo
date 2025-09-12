@@ -1,9 +1,5 @@
 import { Component, signal } from '@angular/core';
-import {
-  ProseContentComponent,
-  type ProseLibrary,
-  type ProseSize,
-} from './prose-content.component';
+import { ProseContentComponent } from './prose-content.component';
 import { ProseSelectorComponent, type ProseSettings } from './prose-selector.component';
 
 @Component({
@@ -41,9 +37,7 @@ import { ProseSelectorComponent, type ProseSettings } from './prose-selector.com
             
             <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800">
               <app-prose-content 
-                library="tw-prose"
-                [size]="currentSettings().size"
-                [darkMode]="currentSettings().darkMode"
+                [cssClasses]="getTwProseClasses()"
               />
             </div>
           </div>
@@ -61,9 +55,7 @@ import { ProseSelectorComponent, type ProseSettings } from './prose-selector.com
             
             <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800">
               <app-prose-content 
-                library="tailwind-typography"
-                [size]="currentSettings().size"
-                [darkMode]="currentSettings().darkMode"
+                [cssClasses]="getTailwindTypographyClasses()"
               />
             </div>
           </div>
@@ -179,19 +171,51 @@ export class ProseComparisonComponent {
   }
 
   protected getTwProseClasses(): string {
-    const baseClass = 'prose';
-    const sizeClass =
-      this.currentSettings().size !== 'base' ? `prose-${this.currentSettings().size}` : '';
-    const darkClass = this.currentSettings().darkMode ? 'prose-invert' : '';
-
-    return [baseClass, sizeClass, darkClass].filter(Boolean).join(' ');
+    // Static class combinations for tw-prose
+    if (this.currentSettings().size === 'base' && !this.currentSettings().darkMode) return 'prose';
+    if (this.currentSettings().size === 'base' && this.currentSettings().darkMode)
+      return 'prose prose-invert';
+    if (this.currentSettings().size === 'sm' && !this.currentSettings().darkMode)
+      return 'prose prose-sm';
+    if (this.currentSettings().size === 'sm' && this.currentSettings().darkMode)
+      return 'prose prose-sm prose-invert';
+    if (this.currentSettings().size === 'lg' && !this.currentSettings().darkMode)
+      return 'prose prose-lg';
+    if (this.currentSettings().size === 'lg' && this.currentSettings().darkMode)
+      return 'prose prose-lg prose-invert';
+    if (this.currentSettings().size === 'xl' && !this.currentSettings().darkMode)
+      return 'prose prose-xl';
+    if (this.currentSettings().size === 'xl' && this.currentSettings().darkMode)
+      return 'prose prose-xl prose-invert';
+    if (this.currentSettings().size === '2xl' && !this.currentSettings().darkMode)
+      return 'prose prose-2xl';
+    if (this.currentSettings().size === '2xl' && this.currentSettings().darkMode)
+      return 'prose prose-2xl prose-invert';
+    return 'prose';
   }
 
   protected getTailwindTypographyClasses(): string {
-    const baseClass = 'legacy-prose';
-    const sizeClass =
-      this.currentSettings().size !== 'base' ? `legacy-prose-${this.currentSettings().size}` : '';
-
-    return [baseClass, sizeClass].filter(Boolean).join(' ');
+    // Static class combinations for @tailwindcss/typography
+    if (this.currentSettings().size === 'base' && !this.currentSettings().darkMode)
+      return 'legacy-prose';
+    if (this.currentSettings().size === 'base' && this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-invert';
+    if (this.currentSettings().size === 'sm' && !this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-sm';
+    if (this.currentSettings().size === 'sm' && this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-sm legacy-prose-invert';
+    if (this.currentSettings().size === 'lg' && !this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-lg';
+    if (this.currentSettings().size === 'lg' && this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-lg legacy-prose-invert';
+    if (this.currentSettings().size === 'xl' && !this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-xl';
+    if (this.currentSettings().size === 'xl' && this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-xl legacy-prose-invert';
+    if (this.currentSettings().size === '2xl' && !this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-2xl';
+    if (this.currentSettings().size === '2xl' && this.currentSettings().darkMode)
+      return 'legacy-prose legacy-prose-2xl legacy-prose-invert';
+    return 'legacy-prose';
   }
 }

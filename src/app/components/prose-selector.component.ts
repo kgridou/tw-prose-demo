@@ -1,5 +1,7 @@
 import { Component, output } from '@angular/core';
-import type { ProseSize, ProseLibrary } from './prose-content.component';
+
+export type ProseSize = 'base' | 'sm' | 'lg' | 'xl' | '2xl';
+export type ProseLibrary = 'tw-prose' | 'tailwind-typography';
 
 export interface ProseSettings {
   library: ProseLibrary;
@@ -45,9 +47,9 @@ export interface ProseSettings {
 
         <!-- Settings Display -->
         <div class="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded border text-xs">
-          <div class="text-gray-600 dark:text-gray-400">Current Classes:</div>
-          <div class="font-mono text-gray-800 dark:text-gray-200 mt-1">
-            {{ getClassPreview() }}
+          <div class="text-gray-600 dark:text-gray-400">Current Settings:</div>
+          <div class="text-gray-800 dark:text-gray-200 mt-1">
+            {{ getSettingsPreview() }}
           </div>
         </div>
       </div>
@@ -85,12 +87,7 @@ export class ProseSelectorComponent {
     return `${baseClasses} bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600`;
   }
 
-  protected getClassPreview(): string {
-    const baseClass = this._settings.library === 'tw-prose' ? 'prose' : 'legacy-prose';
-    const sizeClass = this._settings.size !== 'base' ? `${baseClass}-${this._settings.size}` : '';
-    const darkClass =
-      this._settings.darkMode && this._settings.library === 'tw-prose' ? 'prose-invert' : '';
-
-    return [baseClass, sizeClass, darkClass].filter(Boolean).join(' ');
+  protected getSettingsPreview(): string {
+    return `Library: ${this._settings.library}, Size: ${this._settings.size}, Dark: ${this._settings.darkMode}`;
   }
 }

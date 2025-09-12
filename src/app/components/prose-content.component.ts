@@ -1,8 +1,5 @@
 import { Component, input } from '@angular/core';
 
-export type ProseSize = 'base' | 'sm' | 'lg' | 'xl' | '2xl';
-export type ProseLibrary = 'tw-prose' | 'tailwind-typography';
-
 @Component({
   selector: 'app-prose-content',
   template: `
@@ -165,45 +162,9 @@ console.log(fibonacci(10)); // Output: 55</code></pre>
     <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
   `,
   host: {
-    '[class]': 'hostClasses()',
+    '[class]': 'cssClasses()',
   },
 })
 export class ProseContentComponent {
-  library = input.required<ProseLibrary>();
-  size = input<ProseSize>('base');
-  darkMode = input<boolean>(false);
-
-  protected hostClasses() {
-    const lib = this.library();
-    const size = this.size();
-    const dark = this.darkMode();
-
-    // Static class combinations for Tailwind purging
-    if (lib === 'tw-prose') {
-      if (size === 'base' && !dark) return 'prose';
-      if (size === 'base' && dark) return 'prose prose-invert';
-      if (size === 'sm' && !dark) return 'prose prose-sm';
-      if (size === 'sm' && dark) return 'prose prose-sm prose-invert';
-      if (size === 'lg' && !dark) return 'prose prose-lg';
-      if (size === 'lg' && dark) return 'prose prose-lg prose-invert';
-      if (size === 'xl' && !dark) return 'prose prose-xl';
-      if (size === 'xl' && dark) return 'prose prose-xl prose-invert';
-      if (size === '2xl' && !dark) return 'prose prose-2xl';
-      if (size === '2xl' && dark) return 'prose prose-2xl prose-invert';
-    } else {
-      // @tailwindcss/typography with legacy-prose
-      if (size === 'base' && !dark) return 'legacy-prose';
-      if (size === 'base' && dark) return 'legacy-prose legacy-prose-invert';
-      if (size === 'sm' && !dark) return 'legacy-prose legacy-prose-sm';
-      if (size === 'sm' && dark) return 'legacy-prose legacy-prose-sm legacy-prose-invert';
-      if (size === 'lg' && !dark) return 'legacy-prose legacy-prose-lg';
-      if (size === 'lg' && dark) return 'legacy-prose legacy-prose-lg legacy-prose-invert';
-      if (size === 'xl' && !dark) return 'legacy-prose legacy-prose-xl';
-      if (size === 'xl' && dark) return 'legacy-prose legacy-prose-xl legacy-prose-invert';
-      if (size === '2xl' && !dark) return 'legacy-prose legacy-prose-2xl';
-      if (size === '2xl' && dark) return 'legacy-prose legacy-prose-2xl legacy-prose-invert';
-    }
-
-    return '';
-  }
+  cssClasses = input.required<string>();
 }
