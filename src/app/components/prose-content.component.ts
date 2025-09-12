@@ -8,7 +8,7 @@ export type ProseLibrary = 'tw-prose' | 'tailwind-typography';
   template: `
     <h1>Typography Test Document</h1>
     <p class="lead">This comprehensive document tests all typography elements supported by both tw-prose and @tailwindcss/typography plugins.</p>
-    
+
     <h2>Headings</h2>
     <h1>Heading Level 1</h1>
     <h2>Heading Level 2</h2>
@@ -19,7 +19,7 @@ export type ProseLibrary = 'tw-prose' | 'tailwind-typography';
 
     <h2>Paragraphs and Text Formatting</h2>
     <p>This is a regular paragraph with <strong>bold text</strong>, <em>italic text</em>, <u>underlined text</u>, and <mark>highlighted text</mark>. You can also have <small>small text</small> and text with <sup>superscript</sup> and <sub>subscript</sub>.</p>
-    
+
     <p>Here's a paragraph with a <a href="#test">link to test</a> the link styling. Links should have proper hover states and visual distinction from regular text.</p>
 
     <h2>Lists</h2>
@@ -129,8 +129,8 @@ console.log(fibonacci(10)); // Output: 55</code></pre>
     <p>Content below the horizontal rule.</p>
 
     <h2>Additional Text Elements</h2>
-    <p>This paragraph tests various inline elements: <abbr title="HyperText Markup Language">HTML</abbr> abbreviation, 
-    <span class="time-element">January 1, 2024</span> time element, and 
+    <p>This paragraph tests various inline elements: <abbr title="HyperText Markup Language">HTML</abbr> abbreviation,
+    <span class="time-element">January 1, 2024</span> time element, and
     <span>generic span element</span>.</p>
 
     <address>
@@ -159,9 +159,9 @@ console.log(fibonacci(10)); // Output: 55</code></pre>
 
     <h2>Long Form Content</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    
+
     <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    
+
     <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
   `,
   host: {
@@ -174,10 +174,36 @@ export class ProseContentComponent {
   darkMode = input<boolean>(false);
 
   protected hostClasses() {
-    const baseClass = this.library() === 'tw-prose' ? 'prose' : 'legacy-prose';
-    const sizeClass = this.size() !== 'base' ? `${baseClass}-${this.size()}` : '';
-    const darkClass = this.darkMode() && this.library() === 'tw-prose' ? 'prose-invert' : '';
+    const lib = this.library();
+    const size = this.size();
+    const dark = this.darkMode();
 
-    return [baseClass, sizeClass, darkClass].filter(Boolean).join(' ');
+    // Static class combinations for Tailwind purging
+    if (lib === 'tw-prose') {
+      if (size === 'base' && !dark) return 'prose';
+      if (size === 'base' && dark) return 'prose prose-invert';
+      if (size === 'sm' && !dark) return 'prose prose-sm';
+      if (size === 'sm' && dark) return 'prose prose-sm prose-invert';
+      if (size === 'lg' && !dark) return 'prose prose-lg';
+      if (size === 'lg' && dark) return 'prose prose-lg prose-invert';
+      if (size === 'xl' && !dark) return 'prose prose-xl';
+      if (size === 'xl' && dark) return 'prose prose-xl prose-invert';
+      if (size === '2xl' && !dark) return 'prose prose-2xl';
+      if (size === '2xl' && dark) return 'prose prose-2xl prose-invert';
+    } else {
+      // @tailwindcss/typography with legacy-prose
+      if (size === 'base' && !dark) return 'legacy-prose';
+      if (size === 'base' && dark) return 'legacy-prose legacy-prose-invert';
+      if (size === 'sm' && !dark) return 'legacy-prose legacy-prose-sm';
+      if (size === 'sm' && dark) return 'legacy-prose legacy-prose-sm legacy-prose-invert';
+      if (size === 'lg' && !dark) return 'legacy-prose legacy-prose-lg';
+      if (size === 'lg' && dark) return 'legacy-prose legacy-prose-lg legacy-prose-invert';
+      if (size === 'xl' && !dark) return 'legacy-prose legacy-prose-xl';
+      if (size === 'xl' && dark) return 'legacy-prose legacy-prose-xl legacy-prose-invert';
+      if (size === '2xl' && !dark) return 'legacy-prose legacy-prose-2xl';
+      if (size === '2xl' && dark) return 'legacy-prose legacy-prose-2xl legacy-prose-invert';
+    }
+
+    return '';
   }
 }
